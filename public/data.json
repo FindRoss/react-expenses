@@ -1,0 +1,30 @@
+[
+  {
+    "title": "Rewe",
+    "id": 1, 
+    "type": "expense",
+    "date": "2022-10-18",
+    "amount": 15
+  }, 
+  {
+    "title": "Haircut",
+    "id": 2, 
+    "type": "expense",
+    "date": "2022-10-18",
+    "amount": 1
+  },
+  {
+    "title": "Monthly wage",
+    "id": 3, 
+    "type": "income",
+    "date": "2022-10-16",
+    "amount": 3000
+  }, 
+  {
+    "title": "Sushi",
+    "id": 4, 
+    "type": "expense",
+    "date": "2022-10-18",
+    "amount": 30
+  }
+]
