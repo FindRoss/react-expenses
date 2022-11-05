@@ -1,16 +1,18 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import { ExpenseContext } from '../ExpenseContext';
 import { v4 as uuidv4 } from 'uuid';
 
-function Form({ handleFormData }) {
+function Form() {
   const clearFormData = {
     title: "",
-    amount: "",
+    amount: 0,
     id: "",
     date: "",
     type: 'expense'
   }
-  let [formData, setFormData] = useState(clearFormData);
-  let [type, setType] = useState('expense');
+  const [formData, setFormData] = useState(clearFormData);
+  const [type, setType] = useState('expense');
+  const { addExpense } = useContext(ExpenseContext);
 
   const classes = {
     row: "form-row mt-3",
@@ -20,17 +22,14 @@ function Form({ handleFormData }) {
 
   const handleFormClick = () => {
     const { title, amount, date } = formData;
-
-    if (title === 0 | amount === "" | date === "") alert('Fill in all fields');
-
-    handleFormData({
+    if (title === 0 | amount === 0 | date === "") alert('Fill in all fields');
+    addExpense({
       id: uuidv4(),
       title,
       amount,
       date,
       type
     });
-
     setFormData(clearFormData);
   }
 

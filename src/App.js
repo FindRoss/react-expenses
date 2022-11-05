@@ -1,14 +1,13 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { ExpenseContext } from './ExpenseContext';
 import Form from './components/Form';
 import Expense from './components/Expense';
 import Nav from './components/Nav';
-import Modal from './components/Modal';
-
+import Pie from './components/Pie';
 
 function App() {
-  let [expenses, setExpenses] = useState([]);
-  let [currency, setCurrency] = useState("EUR");
-  let [showModal, setShowModal] = useState(false);
+  const { expenses } = useContext(ExpenseContext);
+  const [currency, setCurrency] = useState("EUR");
 
   const currencyOptions = {
     "EUR": "€",
@@ -16,61 +15,42 @@ function App() {
     "USD": "$",
   }
 
-  const fetchData = useCallback(() => {
-    fetch('./data.json')
-      .then(response => response.json())
-      .then(data => {
-        setExpenses(data)
-      });
-  }, [])
-
   useEffect(() => {
-    fetchData()
-  }, [fetchData]);
-
-  useEffect(() => {
+    // Apply bg-blue-50 
     document.body.style.backgroundColor = "rgb(239 246 255)";
   }, []);
 
-  const handleDeleteExpense = id => {
-    const filteredExpenses = expenses.filter(expense => expense.id !== id);
-    // Are you sure you want to delete this item?
-    // setShowModal(true);
-    // Pass info into the modal...
-    // How to trigger modal...
-    setExpenses(filteredExpenses);
-  }
-
-  // const handleModalToggle = () => {
-  //   console.log('toggling the modal bro!');
-  //   setShowModal(!showModal);
-  // };
-
   return (
-    <div>
+    <>
       <div className="container-sm max-w-4xl mx-auto px-4">
+
         <Nav currency={currency} currencyOptions={currencyOptions} handleSetCurrency={(currency) => setCurrency(currency)} />
-        {/* {showModal ? <Modal toggleModal={handleModalToggle} /> : null} */}
-        {/* Budget */}
-        <div className="flex justify-end"><span className="text-2xl font-light">{currencyOptions[currency]}800</span></div>
-        {/* Add and List */}
+
         <div className="grid grid-cols-1 md:grid-cols-3 md:gap-x-4">
-          <Form handleFormData={(expense) => setExpenses([...expenses, expense])} />
+          <Form />
           <div className="col-span-2">
             {(expenses.length > 0) &&
-              expenses.map((expense, index) => <Expense expense={expense} key={index} currencySymbol={currencyOptions[currency]} deleteExpense={handleDeleteExpense} />)}
+              expenses.map((expense, index) =>
+                <Expense
+                  key={index}
+                  expense={expense}
+                  currencySymbol={currencyOptions[currency]}
+                />)}
           </div>
         </div>
-        {/* Expenses vs Income */}
-        <div className="mt-4">
-          <h2 className="text-1xl font-bold">Expenses vs Income</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 md:gap-x-4">
-            <div>Some chart showing the difference</div>
-            <div>Some list showing type of expese or topic</div>
+
+
+        <div className="grid grid-cols-1 md:grid-cols-2 md:gap-x-4">
+          <div className="mt-5 bg-white rounded shadow p-4">
+            <h2 className="text-1xl font-bold">Expenses vs Income</h2>
+            Some chart showing the difference
+            <Pie />
           </div>
+          <div>Some list showing type of expese or topic</div>
         </div>
+
       </div>
-    </div>
+    </>
   );
 }
 
